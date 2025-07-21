@@ -1,5 +1,6 @@
 import random
 import string
+import datetime
 
 class password():
     def __init__(self):
@@ -86,7 +87,6 @@ class password():
                 password_length = int(input("Enter the desired password length (minimum 1): "))
             except ValueError:
                 print("Please enter a valid integer greater than zero.")  
-                password_length = int(input("Enter the desired password length (minimum 1): "))
             else:
                 self.set_password_length(password_length)     
                 valid_length = True
@@ -149,6 +149,17 @@ while generate == "y":
     password_instance.change_numbers()
     password_instance.change_password_length()
     password_instance.display_choices()
+    while password_instance.get_choice_lower()=="n" and password_instance.get_choice_upper()=="n" and password_instance.get_choice_symbols()=="n" and password_instance.get_choice_numbers()=="n":
+        print("you must choose at least one option to generate a password")
+        to_change = input("What would you like to change? (1. lower/2. upper/3. symbols/4. numbers):").lower()
+        if to_change == "1":
+            password_instance.change_lower()
+        elif to_change == "2":
+            password_instance.change_upper()
+        elif to_change =="3":
+            password_instance.change_symbols()
+        elif to_change == "4":
+            password_instance.change_numbers()
     change = input("Are you happy with your choices? Y/N: ").lower()
     while change not in ["y", "n"]:
         print("Please enter Y or N")
@@ -171,13 +182,29 @@ while generate == "y":
         change = input("Are you happy with your choices? Y/N: ").lower()
     password_instance.generate_password()
     password_instance.display_password()
+    save_password = input("Would you like to save this password? Y/N: ").lower()
+    while save_password not in ["y", "n"]:
+        print("Please enter Y or N")
+        save_password = input("Would you like to save this password? Y/N: ").lower()
+    if save_password == "y":
+        from datetime import datetime
+
+        with open("saved_passwords.txt", "a") as file:
+            file.write(datetime.now().strftime("%Y-%m-%d_%H.%M.%S")+"  "+password_instance.get_password()+"\n")
     generate = input("\nWould you like to generate a new password? Y/N: ").lower()
     while generate not in ["y","n"]:
         print("Please enter Y or N")
         generate = input("Would you like to generate a new password? Y/N:").lower()
+if generate == "n":
+    delete_password = input("Would you like to delete the saved passwords? Y/N: ").lower()
+    while delete_password not in ["y", "n"]:
+        print("Please enter Y or N")
+        delete_password = input("Would you like to delete the saved passwords? Y/N: ").lower()
+    if delete_password == "y":
+        with open("saved_passwords.txt", "w") as file:
+            file.write("")
 
         
-
 
 
 
