@@ -1,7 +1,192 @@
 import random
 import string
 
-def lowercase():
+class password():
+    def __init__(self):
+        self.lowercase = string.ascii_lowercase
+        self.uppercase = string.ascii_uppercase
+        self.symbols = string.punctuation
+        self.numbers = string.digits
+        self.choice_lower = ""
+        self.choice_upper =""
+        self.choice_symbols =""
+        self.choice_numbers = ""
+        self.password_length = 0
+        self.password = ""
+
+
+    def get_choice_lower(self):
+        return self.choice_lower
+    def get_choice_upper(self):
+        return self.choice_upper
+    def get_choice_symbols(self):
+        return self.choice_symbols
+    def get_choice_numbers(self):
+        return self.choice_numbers
+    def get_password_length(self):
+        return self.password_length
+    def get_password(self):
+        return self.password
+        
+
+    def set_choice_lower(self, choice_lower):
+        self.choice_lower = choice_lower
+    def set_choice_upper(self, uppercase):
+        self.choice_upper=uppercase
+    def set_choice_symbols(self, symbols):
+        self.choice_symbols=symbols
+    def set_choice_numbers(self, numbers):
+        self.choice_numbers = numbers
+    def set_password_length(self, length):
+        self.password_length = length
+    def set_password(self,password):
+        self.password = password
+
+    def random_lower(self):
+        random_lower = random.choice(self.lowercase)
+        return random_lower
+    def random_upper(self):
+        random_upper = random.choice(self.uppercase)
+        return random_upper
+    def random_symbol(self):
+        random_symbol = random.choice(self.symbols)
+        return random_symbol
+    def random_numbers(self):
+        random_number = random.choice(self.numbers)
+        return random_number
+        
+    def change_lower(self):
+        choice_lower = input("Include lowercase letters? (y/n): ").lower()
+        while choice_lower not in ["y","n"]:
+            print("Please enter y/n")
+            choice_lower =  input("Include lowercase letters? (y/n): ").lower()
+        self.set_choice_lower(choice_lower)
+    def change_upper(self):
+        choice_upper = input("Include uppercase letters? (y/n): ").lower()
+        while choice_upper not in ["y","n"]:
+            print("Please enter y/n")
+            choice_upper =  input("Include uppercase letters? (y/n): ").lower()
+        self.set_choice_upper(choice_upper)
+    def change_symbols(self):
+        choice_symbol = input("Include symbols? (y/n): ").lower()
+        while choice_symbol not in ["y","n"]:
+            print("Please enter y/n")
+            choice_symbol =  input("Include symbols? (y/n): ").lower()
+        self.set_choice_symbols(choice_symbol)
+    def change_numbers(self):
+        choice_number = input("Include numbers? (y/n): ").lower()
+        while choice_number not in ["y","n"]:
+            print("Please enter y/n")
+            choice_number =  input("Include numbers? (y/n): ").lower()
+        self.set_choice_numbers(choice_number)
+    def change_password_length(self):
+        valid_length = False
+        while not valid_length:
+            try:
+                password_length = int(input("Enter the desired password length (minimum 1): "))
+            except ValueError:
+                print("Please enter a valid integer greater than zero.")  
+                password_length = int(input("Enter the desired password length (minimum 1): "))
+            else:
+                self.set_password_length(password_length)     
+                valid_length = True
+
+    def generate_password(self):
+        password=[]
+        randint_limit=self.get_password_length()
+        while randint_limit > 0:
+            if self.get_choice_lower() == "y":
+                limit=random.randint(0,(randint_limit//2)+1)
+                for i in range(0, limit):
+                    password.append(self.random_lower())
+                randint_limit -= limit
+            if self.get_choice_upper() == "y":
+                limit=random.randint(0,(randint_limit//2)+1)
+                for i in range(0, limit):
+                    password.append(self.random_upper())
+                randint_limit -= limit
+            if self.get_choice_symbols() == "y":
+                limit=random.randint(0,(randint_limit//2)+1)
+                for i in range(0, limit):
+                    password.append(self.random_symbol())
+                randint_limit -= limit
+            if self.get_choice_numbers() == "y":
+                limit=random.randint(0,(randint_limit//2)+1)
+                for i in range(0, limit):
+                    password.append(self.random_numbers())
+                randint_limit -= limit
+            random.shuffle(password)
+            self.set_password(''.join(password))
+
+    def display_password(self):
+        print("\nGenerated password: ", self.get_password())
+
+    def welcome_message():
+        print("Welcome to the password generator\n" \
+                "This program will help you create a secure password.\n" \
+                "You can choose to include lowercase letters, uppercase letters, symbols, and numbers. \n" \
+                "You can also specify the length of the password. \n" \
+                "Lets get started!\n")
+
+    def display_choices(self):
+        print("\n--------------------------------------\n\nYou have chosen: \n" \
+            "lower case: ", self.get_choice_lower(),"\n"\
+            "upper case: ", self.get_choice_upper(),"\n"\
+            "symbols: ", self.get_choice_symbols(),"\n"\
+            "numbers: ",self.get_choice_numbers(),"\n"
+            "password length: ",self.get_password_length(),"\n")    
+
+password_instance = password()
+generate = input("Would you like to generate a new password? Y/N: ").lower()
+while generate not in ["y","n"]:
+    print("Please enter Y or N")
+    generate = input("Would you like to generate a new password? Y/N:").lower()
+while generate == "y":
+    password_instance.welcome_message
+    password_instance.change_lower()
+    password_instance.change_upper()
+    password_instance.change_symbols()
+    password_instance.change_numbers()
+    password_instance.change_password_length()
+    password_instance.display_choices()
+    change = input("Are you happy with your choices? Y/N: ").lower()
+    while change not in ["y", "n"]:
+        print("Please enter Y or N")
+        change = input("Are you happy with your choices? Y/N:").lower()
+    while change == "n":
+        to_change = input("What would you like to change? (1. lower/2. upper/3. symbols/4. numbers/5. password length):").lower()
+        if to_change == "1":
+            password_instance.change_lower()
+        elif to_change == "2":
+            password_instance.change_upper()
+        elif to_change =="3":
+            password_instance.change_symbols()
+        elif to_change == "4":
+            password_instance.change_numbers()
+        elif to_change == "5":
+            password_instance.change_password_length()
+        else:
+            print("Invalid choice, please try again.")
+        password_instance.display_choices()
+        change = input("Are you happy with your choices? Y/N: ").lower()
+    password_instance.generate_password()
+    password_instance.display_password()
+    generate = input("\nWould you like to generate a new password? Y/N: ").lower()
+    while generate not in ["y","n"]:
+        print("Please enter Y or N")
+        generate = input("Would you like to generate a new password? Y/N:").lower()
+
+        
+
+
+
+
+
+
+
+
+
+"""def lowercase():
     random_lower=random.choice(string.ascii_lowercase)
     return random_lower
 
@@ -42,10 +227,10 @@ def generate_password():
                 password.append(numbers())
             randint_limit -= limit
     random.shuffle(password)
-    return ''.join(password)
+    return ''.join(password)"""
 
 
-print("Welcome to the password generator")
+"""print("Welcome to the password generator")
 generate=input("would you like to generate a new password? Y/N: ").lower()
 while generate not in ["y", "n"]:
     print("please enter Y or N")
@@ -113,14 +298,7 @@ while generate== "y":
                 print("please enter Y or N")
                 choice_numbers= input("numbers: ").lower()
             valid_length=False
-            while not valid_length:
-                try:
-                    password_length=int(input("\n\npassword length: "))
-                except ValueError:
-                    print("please enter an integer greater than one.")
-                    password_length=int(input("\npassword length: "))
-                else:
-                    valid_length=True
+            
             print ("you have chosen: \n"\
                f"lower case: {choice_lower}\n"\
                 f"upper case: {choice_upper}\n"\
@@ -132,4 +310,4 @@ while generate== "y":
             toggle_input=True
     generate_password = generate_password()
     print("\n\nGenerated password: ",generate_password)
-    generate=input("\nwould you like to generate a new password? Y/N: ").lower()
+    generate=input("\nwould you like to generate a new password? Y/N: ").lower()"""
