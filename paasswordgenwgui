@@ -1,3 +1,8 @@
+import random
+import string
+import datetime
+from tkinter import *
+from tkinter import font
 class Window(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
