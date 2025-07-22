@@ -1,6 +1,5 @@
 import random
 import string
-import datetime
 from tkinter import *
 from tkinter import font
 class Window(Frame):
