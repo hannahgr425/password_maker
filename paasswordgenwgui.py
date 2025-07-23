@@ -42,7 +42,7 @@ class Window(Frame):
         return self.password
 
     def welcome_message(self):
-        welcome_label = Label(self, text="Welcome to the Password Generator", bg="lightsteelblue", font=("Helvetica", 16))
+        welcome_label = Label(self, text="Welcome to the Password Generator", bg="lightsteelblue", font=("Helvetica", 20))
         welcome_label.pack(pady=15)
     def ClickExit(self):
         exit()
@@ -121,12 +121,12 @@ class Window(Frame):
             self.display_password()
     def display_password(self):
         password_label=Label(self, text=f"Your random password is: {self.get_password()}", bg="lightsteelblue", font=("Helvetica",12))
-        password_label.place(x=800, y=500)
+        password_label.place(x=830, y=500)
     
     def save_button(self):
         save_button = Button(self,text="Save Password", font=("Helvetica", 10),bg="lightsteelblue", activebackground="azure", activeforeground="white", command=self.savetofile)
         #command=password().generate_password # could get commmand to take an objext or make generate_password a static method
-        save_button.place(x=600, y=600)
+        save_button.place(x=700, y=600)
 
     def savetofile(self):
         from datetime import datetime
