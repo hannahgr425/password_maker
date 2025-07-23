@@ -141,8 +141,6 @@ class password():
             "password length: ",self.get_password_length(),"\n") 
         
 
-
-
 password_instance = password()
 generate = input("Would you like to generate a new password? Y/N: ").lower()
 while generate not in ["y","n"]:
