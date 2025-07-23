@@ -18,6 +18,7 @@ class Window(Frame):
         self.symbols = string.punctuation
         self.numbers = string.digits
         self.password = ""
+        self.password_change= StringVar()
         
 
         exit_button = Button(self, text="Exit", command=self.ClickExit)
@@ -38,8 +39,10 @@ class Window(Frame):
     
     def set_password(self,password):
         self.password = password
+
     def get_password(self):
         return self.password
+    
 
     def welcome_message(self):
         welcome_label = Label(self, text="Welcome to the Password Generator", bg="lightsteelblue", font=("Helvetica", 20))
@@ -95,34 +98,79 @@ class Window(Frame):
     def generate_password(self):
         password=[]
         randint_limit=self.get_passwordlength()
-        while randint_limit > 0:
+        while randint_limit > 1:
             if self.get_lowervar() == 1:
-                limit=random.randint(0,(randint_limit//2)+1)
+                limit=random.randint(0,(randint_limit//2))
+                if limit==0 and randint_limit>0:
+                    limit=1
                 for i in range(0, limit):
                     password.append(self.random_lower())
                 randint_limit -= limit
             if self.get_uppervar()==1:
-                limit=random.randint(0,(randint_limit//2)+1)
+                limit=random.randint(0,(randint_limit//2))
+                if limit==0 and randint_limit>0:
+                    limit=1
                 for i in range(0, limit):
                     password.append(self.random_upper())
                 randint_limit -= limit
             if self.get_symbolsvar()==1:
-                limit=random.randint(0,(randint_limit//2)+1)
+                limit=random.randint(0,(randint_limit//2))
+                if limit==0 and randint_limit>0:
+                    limit=1
                 for i in range(0, limit):
                     password.append(self.random_symbol())
                 randint_limit -= limit
             if self.get_numbersvar()==1:
-                limit=random.randint(0,(randint_limit//2)+1)
+                limit=random.randint(0,(randint_limit//2))
+                if limit==0 and randint_limit>0:
+                    limit=1
                 for i in range(0, limit):
                     password.append(self.random_numbers())
                 randint_limit -= limit
-            random.shuffle(password)
-            self.set_password(''.join(password))
-            self.display_password()
+        while randint_limit==1:
+            if self.get_lowervar() == 1:
+                limit=random.randint(0,1)
+                for i in range(0, limit):
+                    password.append(self.random_lower())
+                if limit==1:
+                    break
+            if self.get_uppervar()==1:
+                limit=random.randint(0,1)
+                for i in range(0, limit):
+                    password.append(self.random_upper())
+                if limit==1:
+                    break
+            if self.get_symbolsvar()==1:
+                limit=random.randint(0,1)
+                for i in range(0, limit):
+                    password.append(self.random_symbol())
+                if limit==1:
+                    break
+            if self.get_numbersvar()==1:
+                limit=random.randint(0,1)
+                for i in range(0, limit):
+                    password.append(self.random_numbers())
+                if limit==1:
+                    break
+        random.shuffle(password)
+        self.set_password(''.join(password))
+        self.display_password()
+
     def display_password(self):
-        password_label=Label(self, text=f"Your random password is: {self.get_password()}", bg="lightsteelblue", font=("Helvetica",12))
-        password_label.place(x=830, y=500)
+        password_label=Label(self, text=f"Your random password is: ", bg="lightsteelblue", font=("Helvetica",12))
+        password_label.place(x=800, y=500)
+        self.password_change=Text(self, bg="lightsteelblue", font=("Helvetica",12), height=1, width=25)
+        self.password_change.place(x=950, y=530)
+        #password_change.delete()
+        self.password_change.insert(1.0, f"{self.get_password()}")
+        self.password_change.get(1.0, END)
+        #password_change.edit()
+        #changed_password=self.password_change.get(self, 1.0, END)
+        #password_change.edit_modified()
+        #self.set_password(self.password_change.get())
     
+
+
     def save_button(self):
         save_button = Button(self,text="Save Password", font=("Helvetica", 10),bg="lightsteelblue", activebackground="azure", activeforeground="white", command=self.savetofile)
         #command=password().generate_password # could get commmand to take an objext or make generate_password a static method
@@ -132,7 +180,7 @@ class Window(Frame):
         from datetime import datetime
 
         with open("saved_passwords.txt", "a") as file:
-            file.write(datetime.now().strftime("%Y-%m-%d_%H.%M.%S")+"  "+self.get_password()+"\n")
+            file.write(datetime.now().strftime("%Y-%m-%d_%H.%M.%S")+"  "+self.password_change.get(1.0, END) + "\n")
     
     def erase_button(self):
         erase_button = Button(self,text="Erase Password", font=("Helvetica", 10),bg="lightsteelblue", activebackground="azure", activeforeground="white", command=self.erasefile)
